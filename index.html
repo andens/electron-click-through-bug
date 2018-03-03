@@ -4,16 +4,31 @@
     <meta charset="UTF-8">
     <title>Hello World!</title>
   </head>
-  <body>
+  <body bgcolor="#fff">
     <h1>Hello World!</h1>
     <!-- All of the Node.js APIs are available in this renderer process. -->
     We are using Node.js <script>document.write(process.versions.node)</script>,
     Chromium <script>document.write(process.versions.chrome)</script>,
     and Electron <script>document.write(process.versions.electron)</script>.
 
+    <div id="click-through" style="background-color: transparent; border: 1px solid #fff; width: 600px; height: 400px; position: absolute; top: 120px; backdrop-filter: opacity(0%);"></div>
+    <div style="background-color: #aaa; position: absolute; left: 50px; top: 140px; width: 200px; height: 100px;">
+      I block input
+    </div>
+
     <script>
-      // You can also require other files to run in this process
-      require('./renderer.js')
+      let win = require('electron').remote.getCurrentWindow();
+      let transparent = document.getElementById("click-through");
+      transparent.addEventListener("mouseenter", () => {
+        console.log("enter");
+        win.setIgnoreMouseEvents(true, {
+          forward: true
+        });
+      });
+      transparent.addEventListener("mouseleave", () => {
+        console.log("leave");
+        win.setIgnoreMouseEvents(false);
+      });
     </script>
   </body>
 </html>
